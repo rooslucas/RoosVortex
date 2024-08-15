@@ -1,5 +1,5 @@
 {
-  description = "Rust flake template";
+  description = "Building my own virtual machine and compiler";
 
   inputs = {
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
