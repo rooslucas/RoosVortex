@@ -14,7 +14,7 @@ enum OpCode {
 
 // make pointers
 fn main() {
-    let mut stack: Vec<i32> = vec![0; 100]; // make it a vector of all 0's
+    let mut stack: Vec<i32> = vec![]; // make it a vector of all 0's
     let programs: Vec<OpCode> = vec![
         OpCode::PUSH(5),
         OpCode::PUSH(4),
@@ -139,13 +139,12 @@ fn pop(mut stack: Vec<i32>, mut stackpointer: usize) -> (Vec<i32>, i32, usize) {
         stackpointer = stack.len() - 1;
     }
 
-    let rt: i32 = stack[stackpointer];
-    stack[stackpointer] = 0;
+    let rt: i32 = stack.pop().unwrap();
     return (stack, rt, stackpointer);
 }
 
 fn push(value: i32, mut stack: Vec<i32>, mut stackpointer: usize) -> (Vec<i32>, usize) {
-    stack[stackpointer] = value;
+    stack.push(value);
     stackpointer += 1;
     return (stack, stackpointer);
 }
