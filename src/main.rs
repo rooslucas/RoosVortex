@@ -1,4 +1,8 @@
+use std::fs::read_to_string;
+use std::str::FromStr;
+
 // define an ENUM with op codes
+#[derive(Debug, PartialEq)]
 enum OpCode {
     ADD,
     SUB,
@@ -9,27 +13,46 @@ enum OpCode {
     PUSH(i32),
 }
 
-// Make a program list
+impl FromStr for OpCode {
+    type Err = ();
+    fn from_str(input: &str) -> Result<OpCode, Self::Err> {
+        let codes: Vec<&str> = input.split_whitespace().collect();
+        let mut value = 0;
 
-// Make a stack
+        if codes.len() > 1 {
+            value = codes[1].parse::<i32>().unwrap();
+        }
 
-// make pointers
+        match codes[0] {
+            "ADD" => Ok(OpCode::ADD),
+            "SUB" => Ok(OpCode::SUB),
+            "MUL" => Ok(OpCode::MUL),
+            "DIV" => Ok(OpCode::DIV),
+            "MOD" => Ok(OpCode::MOD),
+            "POP" => Ok(OpCode::POP),
+            "PUSH" => Ok(OpCode::PUSH(value)),
+            _ => Err(()),
+        }
+    } // Match statement with opcode
+      // if statement is push, get value out and put it in brackets
+}
+
 fn main() {
-    let mut stack: Vec<i32> = vec![]; // make it a vector of all 0's
-    let programs: Vec<OpCode> = vec![
-        OpCode::PUSH(5),
-        OpCode::PUSH(4),
-        OpCode::ADD,
-        OpCode::PUSH(8),
-        OpCode::SUB,
-        OpCode::PUSH(37),
-        OpCode::PUSH(67),
-        OpCode::MUL,
-    ];
+    // Make a stack
+    let mut stack: Vec<i32> = vec![];
+
+    // Read program instructions from file
+    let mut programs = Vec::new();
+    for line in read_to_string("./Input/input.rv").unwrap().lines() {
+        programs.push(line.to_string());
+    }
+
+    // Define pointer
     let mut stackpointer: usize = 0;
 
     for program in programs {
-        match program {
+        let p = OpCode::from_str(&program).unwrap();
+        match p {
             OpCode::ADD => {
                 let rt = add(stack, stackpointer);
                 stack = rt.0;
