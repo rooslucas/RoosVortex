@@ -19,6 +19,9 @@ enum OpCode {
     NOT,
 
     JUMP(String),
+    IF(bool),
+    ELSE,
+    END,
 
     POP,
     PUSH(i32),
@@ -30,11 +33,14 @@ impl FromStr for OpCode {
         let codes: Vec<&str> = input.split_whitespace().collect();
         let mut value = 0;
         let mut function: String = "".to_owned();
+        let mut flag = false;
 
         if (codes.len() > 1) & (codes[0] == "PUSH") {
             value = codes[1].parse::<i32>().unwrap();
         } else if (codes.len() > 1) & (codes[0] == "JUMP") {
             function = codes[1].to_owned();
+        } else if (codes.len() > 1) & (codes[0] == "IF") {
+            flag = codes[1].parse::<bool>().unwrap();
         }
 
         match codes[0] {
@@ -53,6 +59,9 @@ impl FromStr for OpCode {
             "NOT" => Ok(OpCode::NOT),
 
             "JUMP" => Ok(OpCode::JUMP(function)),
+            "IF" => Ok(OpCode::IF(flag)),
+            "ELSE" => Ok(OpCode::ELSE),
+            "END" => Ok(OpCode::END),
 
             "POP" => Ok(OpCode::POP),
             "PUSH" => Ok(OpCode::PUSH(value)),
@@ -77,95 +86,109 @@ fn main() {
     let mut programpointer: usize = 0;
 
     while programpointer < programs.len() {
-        let program = &programs[programpointer];
-        println!("{}", programpointer);
-        programpointer += 1;
-        let p = OpCode::from_str(program).unwrap();
-        match p {
-            OpCode::ADD => {
-                let rt = add(stack, stackpointer);
-                stack = rt.0;
-                stackpointer = rt.1;
-            }
-            OpCode::SUB => {
-                let rt = sub(stack, stackpointer);
-                stack = rt.0;
-                stackpointer = rt.1;
-            }
-            OpCode::MUL => {
-                let rt = mul(stack, stackpointer);
-                stack = rt.0;
-                stackpointer = rt.1;
-            }
-            OpCode::DIV => {
-                let rt = div(stack, stackpointer);
-                stack = rt.0;
-                stackpointer = rt.1;
-            }
+        if &programs[programpointer] != "/n" {
+            let program = &programs[programpointer];
+            println!("{}", programpointer);
+            programpointer += 1;
 
-            OpCode::MOD => {
-                let rt = modu(stack, stackpointer);
-                stack = rt.0;
-                stackpointer = rt.1;
-            }
+            let p = OpCode::from_str(program).unwrap();
+            match p {
+                OpCode::ADD => {
+                    let rt = add(stack, stackpointer);
+                    stack = rt.0;
+                    stackpointer = rt.1;
+                }
+                OpCode::SUB => {
+                    let rt = sub(stack, stackpointer);
+                    stack = rt.0;
+                    stackpointer = rt.1;
+                }
+                OpCode::MUL => {
+                    let rt = mul(stack, stackpointer);
+                    stack = rt.0;
+                    stackpointer = rt.1;
+                }
+                OpCode::DIV => {
+                    let rt = div(stack, stackpointer);
+                    stack = rt.0;
+                    stackpointer = rt.1;
+                }
+                OpCode::MOD => {
+                    let rt = modu(stack, stackpointer);
+                    stack = rt.0;
+                    stackpointer = rt.1;
+                }
+                OpCode::EXP => {
+                    let rt = exp(stack, stackpointer);
+                    stack = rt.0;
+                    stackpointer = rt.1;
+                }
 
-            OpCode::EXP => {
-                let rt = exp(stack, stackpointer);
-                stack = rt.0;
-                stackpointer = rt.1;
-            }
+                OpCode::LT => {
+                    let rt = lt(stack, stackpointer);
+                    stack = rt.0;
+                    stackpointer = rt.1;
+                }
+                OpCode::GT => {
+                    let rt = gt(stack, stackpointer);
+                    stack = rt.0;
+                    stackpointer = rt.1;
+                }
+                OpCode::EQ => {
+                    let rt = eq(stack, stackpointer);
+                    stack = rt.0;
+                    stackpointer = rt.1;
+                }
+                OpCode::AND => {
+                    let rt = and(stack, stackpointer);
+                    stack = rt.0;
+                    stackpointer = rt.1;
+                }
+                OpCode::OR => {
+                    let rt = or(stack, stackpointer);
+                    stack = rt.0;
+                    stackpointer = rt.1;
+                }
+                OpCode::NOT => {
+                    let rt = not(stack, stackpointer);
+                    stack = rt.0;
+                    stackpointer = rt.1;
+                }
 
-            OpCode::LT => {
-                let rt = lt(stack, stackpointer);
-                stack = rt.0;
-                stackpointer = rt.1;
-            }
+                OpCode::JUMP(function) => {
+                    programpointer = jump(function, programs.clone());
+                }
+                OpCode::IF(flag) => {
+                    let rt = if_else(flag, stack, stackpointer, programs.clone(), programpointer);
+                    stack = rt.0;
+                    stackpointer = rt.1;
+                    programpointer = rt.2;
+                }
+                OpCode::ELSE => {
+                    let rt = if_else(true, stack, stackpointer, programs.clone(), programpointer);
+                    stack = rt.0;
+                    stackpointer = rt.1;
+                    programpointer = rt.2;
+                }
 
-            OpCode::GT => {
-                let rt = gt(stack, stackpointer);
-                stack = rt.0;
-                stackpointer = rt.1;
-            }
+                OpCode::END => {
+                    programpointer +=
+                        jump("END".to_owned(), programs[(programpointer)..].to_vec()) + 1;
+                }
 
-            OpCode::EQ => {
-                let rt = eq(stack, stackpointer);
-                stack = rt.0;
-                stackpointer = rt.1;
+                OpCode::POP => {
+                    let rt = pop(stack, stackpointer);
+                    stack = rt.0;
+                    stackpointer = rt.2;
+                }
+                OpCode::PUSH(value) => {
+                    let rt = push(value, stack, stackpointer);
+                    stack = rt.0;
+                    stackpointer = rt.1;
+                }
             }
-
-            OpCode::AND => {
-                let rt = and(stack, stackpointer);
-                stack = rt.0;
-                stackpointer = rt.1;
-            }
-
-            OpCode::OR => {
-                let rt = or(stack, stackpointer);
-                stack = rt.0;
-                stackpointer = rt.1;
-            }
-
-            OpCode::NOT => {
-                let rt = not(stack, stackpointer);
-                stack = rt.0;
-                stackpointer = rt.1;
-            }
-
-            OpCode::JUMP(function) => {
-                programpointer = jump(function, programs.clone());
-            }
-
-            OpCode::POP => {
-                let rt = pop(stack, stackpointer);
-                stack = rt.0;
-                stackpointer = rt.2;
-            }
-
-            OpCode::PUSH(value) => {
-                let rt = push(value, stack, stackpointer);
-                stack = rt.0;
-                stackpointer = rt.1;
-            }
+        } else {
+            programpointer += 1;
         }
         println!("{:?}", stack);
     }
@@ -366,26 +389,38 @@ fn not(mut stack: Vec<i32>, mut stackpointer: usize) -> (Vec<i32>, usize) {
 }
 
 // Advanced operations
-// if_else
-// als waar
-// dan jump naar if
-// anders jump naar else
+fn if_else(
+    mut flag: bool,
+    stack: Vec<i32>,
+    stackpointer: usize,
+    programs: Vec<String>,
+    mut pp: usize,
+) -> (Vec<i32>, usize, usize) {
+    let rt = pop(stack, stackpointer);
+    let s = rt.1;
+    if s == 1 {
+        flag = false;
+    } else {
+        if flag {
+            pp = jump("ELSE".to_owned(), programs) + 1;
+        } else {
+            pp = jump("END".to_owned(), programs[(pp + 1)..].to_vec()) + 1;
+        }
+    }
+
+    return (rt.0, rt.2, pp);
+}
 
 fn jump(function: String, programs: Vec<String>) -> usize {
     //search in program
 
     let new_pointer: usize = programs.iter().position(|p| *p == function).unwrap();
-
     return new_pointer;
 }
 
 // Adjusting the stack operations
 fn pop(mut stack: Vec<i32>, mut stackpointer: usize) -> (Vec<i32>, i32, usize) {
-    if stackpointer > 0 {
-        stackpointer -= 1;
-    } else {
-        stackpointer = stack.len() - 1;
-    }
+    stackpointer -= 1;
 
     let rt: i32 = stack.pop().unwrap();
     return (stack, rt, stackpointer);
