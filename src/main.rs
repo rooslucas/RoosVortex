@@ -398,9 +398,7 @@ fn if_else(
 ) -> (Vec<i32>, usize, usize) {
     let rt = pop(stack, stackpointer);
     let s = rt.1;
-    if s == 1 {
-        flag = false;
-    } else {
+    if s == 0 {
         if flag {
             pp = jump("ELSE".to_owned(), programs) + 1;
         } else {
