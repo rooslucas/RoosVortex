@@ -1,6 +1,5 @@
 use std::fs::read_to_string;
 use std::str::FromStr;
-use std::string;
 
 // define an ENUM with op codes
 #[derive(Debug, PartialEq)]
@@ -379,7 +378,6 @@ fn jump(function: String, programs: Vec<String>) -> usize {
 
     return new_pointer;
 }
-// adjust the programcounter
 
 // Adjusting the stack operations
 fn pop(mut stack: Vec<i32>, mut stackpointer: usize) -> (Vec<i32>, i32, usize) {
