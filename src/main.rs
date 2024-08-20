@@ -1,5 +1,6 @@
 use std::fs::read_to_string;
 use std::str::FromStr;
+use std::string;
 
 // define an ENUM with op codes
 #[derive(Debug, PartialEq)]
@@ -18,6 +19,8 @@ enum OpCode {
     OR,
     NOT,
 
+    JUMP(String),
+
     POP,
     PUSH(i32),
 }
@@ -27,9 +30,12 @@ impl FromStr for OpCode {
     fn from_str(input: &str) -> Result<OpCode, Self::Err> {
         let codes: Vec<&str> = input.split_whitespace().collect();
         let mut value = 0;
+        let mut function: String = "".to_owned();
 
-        if codes.len() > 1 {
+        if (codes.len() > 1) & (codes[0] == "PUSH") {
             value = codes[1].parse::<i32>().unwrap();
+        } else if (codes.len() > 1) & (codes[0] == "JUMP") {
+            function = codes[1].to_owned();
         }
 
         match codes[0] {
@@ -46,6 +52,8 @@ impl FromStr for OpCode {
             "AND" => Ok(OpCode::AND),
             "OR" => Ok(OpCode::OR),
             "NOT" => Ok(OpCode::NOT),
+
+            "JUMP" => Ok(OpCode::JUMP(function)),
 
             "POP" => Ok(OpCode::POP),
             "PUSH" => Ok(OpCode::PUSH(value)),
@@ -65,11 +73,15 @@ fn main() {
         programs.push(line.to_string());
     }
 
-    // Define pointer
+    // Define pointers
     let mut stackpointer: usize = 0;
+    let mut programpointer: usize = 0;
 
-    for program in programs {
-        let p = OpCode::from_str(&program).unwrap();
+    while programpointer < programs.len() {
+        let program = &programs[programpointer];
+        println!("{}", programpointer);
+        programpointer += 1;
+        let p = OpCode::from_str(program).unwrap();
         match p {
             OpCode::ADD => {
                 let rt = add(stack, stackpointer);
@@ -138,6 +150,10 @@ fn main() {
                 let rt = not(stack, stackpointer);
                 stack = rt.0;
                 stackpointer = rt.1;
+            }
+
+            OpCode::JUMP(function) => {
+                programpointer = jump(function, programs.clone());
             }
 
             OpCode::POP => {
@@ -349,6 +365,21 @@ fn not(mut stack: Vec<i32>, mut stackpointer: usize) -> (Vec<i32>, usize) {
 
     return (stack, stackpointer);
 }
+
+// Advanced operations
+// if_else
+// als waar
+// dan jump naar if
+// anders jump naar else
+
+fn jump(function: String, programs: Vec<String>) -> usize {
+    //search in program
+
+    let new_pointer: usize = programs.iter().position(|p| *p == function).unwrap();
+
+    return new_pointer;
+}
+// adjust the programcounter
 
 // Adjusting the stack operations
 fn pop(mut stack: Vec<i32>, mut stackpointer: usize) -> (Vec<i32>, i32, usize) {
