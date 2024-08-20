@@ -9,6 +9,15 @@ enum OpCode {
     MUL,
     DIV,
     MOD,
+    EXP,
+
+    LT,
+    GT,
+    EQ,
+    AND,
+    OR,
+    NOT,
+
     POP,
     PUSH(i32),
 }
@@ -29,6 +38,15 @@ impl FromStr for OpCode {
             "MUL" => Ok(OpCode::MUL),
             "DIV" => Ok(OpCode::DIV),
             "MOD" => Ok(OpCode::MOD),
+            "EXP" => Ok(OpCode::EXP),
+
+            "LT" => Ok(OpCode::LT),
+            "GT" => Ok(OpCode::GT),
+            "EQ" => Ok(OpCode::EQ),
+            "AND" => Ok(OpCode::AND),
+            "OR" => Ok(OpCode::OR),
+            "NOT" => Ok(OpCode::NOT),
+
             "POP" => Ok(OpCode::POP),
             "PUSH" => Ok(OpCode::PUSH(value)),
             _ => Err(()),
@@ -80,16 +98,59 @@ fn main() {
                 stackpointer = rt.1;
             }
 
+            OpCode::EXP => {
+                let rt = exp(stack, stackpointer);
+                stack = rt.0;
+                stackpointer = rt.1;
+            }
+
+            OpCode::LT => {
+                let rt = lt(stack, stackpointer);
+                stack = rt.0;
+                stackpointer = rt.1;
+            }
+
+            OpCode::GT => {
+                let rt = gt(stack, stackpointer);
+                stack = rt.0;
+                stackpointer = rt.1;
+            }
+
+            OpCode::EQ => {
+                let rt = eq(stack, stackpointer);
+                stack = rt.0;
+                stackpointer = rt.1;
+            }
+
+            OpCode::AND => {
+                let rt = and(stack, stackpointer);
+                stack = rt.0;
+                stackpointer = rt.1;
+            }
+
+            OpCode::OR => {
+                let rt = or(stack, stackpointer);
+                stack = rt.0;
+                stackpointer = rt.1;
+            }
+
+            OpCode::NOT => {
+                let rt = not(stack, stackpointer);
+                stack = rt.0;
+                stackpointer = rt.1;
+            }
+
             OpCode::POP => {
                 let rt = pop(stack, stackpointer);
                 stack = rt.0;
                 stackpointer = rt.2;
-            } //pop(stack, stackpointer),
+            }
+
             OpCode::PUSH(value) => {
                 let rt = push(value, stack, stackpointer);
                 stack = rt.0;
                 stackpointer = rt.1;
-            } //push(value, stack, stackpointer),
+            }
         }
         println!("{:?}", stack);
     }
@@ -99,6 +160,7 @@ fn main() {
 
 // define a match statement that makes the reactions for each opcode
 
+// Basic operations
 fn add(mut stack: Vec<i32>, mut stackpointer: usize) -> (Vec<i32>, usize) {
     let rt_a = pop(stack, stackpointer);
     let a = rt_a.1;
@@ -147,6 +209,22 @@ fn mul(mut stack: Vec<i32>, mut stackpointer: usize) -> (Vec<i32>, usize) {
     return (stack, stackpointer);
 }
 
+fn exp(mut stack: Vec<i32>, mut stackpointer: usize) -> (Vec<i32>, usize) {
+    let rt_a = pop(stack, stackpointer);
+    let a = rt_a.1;
+    stackpointer = rt_a.2;
+
+    let rt_b = pop(rt_a.0, stackpointer);
+    let b: i32 = rt_b.1;
+    stackpointer = rt_b.2;
+
+    let rt = push(a.pow(b.try_into().unwrap()), rt_b.0, stackpointer);
+    stack = rt.0;
+    stackpointer = rt.1;
+
+    return (stack, stackpointer);
+}
+
 fn div(mut stack: Vec<i32>, mut stackpointer: usize) -> (Vec<i32>, usize) {
     let rt_a = pop(stack, stackpointer);
     let a = rt_a.1;
@@ -179,6 +257,100 @@ fn modu(mut stack: Vec<i32>, mut stackpointer: usize) -> (Vec<i32>, usize) {
     return (stack, stackpointer);
 }
 
+// Boolean operations
+fn lt(mut stack: Vec<i32>, mut stackpointer: usize) -> (Vec<i32>, usize) {
+    let rt_a = pop(stack, stackpointer);
+    let a = rt_a.1;
+    stackpointer = rt_a.2;
+
+    let rt_b = pop(rt_a.0, stackpointer);
+    let b: i32 = rt_b.1;
+    stackpointer = rt_b.2;
+
+    let rt = push((a < b) as i32, rt_b.0, stackpointer);
+    stack = rt.0;
+    stackpointer = rt.1;
+
+    return (stack, stackpointer);
+}
+
+fn gt(mut stack: Vec<i32>, mut stackpointer: usize) -> (Vec<i32>, usize) {
+    let rt_a = pop(stack, stackpointer);
+    let a = rt_a.1;
+    stackpointer = rt_a.2;
+
+    let rt_b = pop(rt_a.0, stackpointer);
+    let b: i32 = rt_b.1;
+    stackpointer = rt_b.2;
+
+    let rt = push((a > b) as i32, rt_b.0, stackpointer);
+    stack = rt.0;
+    stackpointer = rt.1;
+
+    return (stack, stackpointer);
+}
+
+fn eq(mut stack: Vec<i32>, mut stackpointer: usize) -> (Vec<i32>, usize) {
+    let rt_a = pop(stack, stackpointer);
+    let a = rt_a.1;
+    stackpointer = rt_a.2;
+
+    let rt_b = pop(rt_a.0, stackpointer);
+    let b: i32 = rt_b.1;
+    stackpointer = rt_b.2;
+
+    let rt = push((a == b) as i32, rt_b.0, stackpointer);
+    stack = rt.0;
+    stackpointer = rt.1;
+
+    return (stack, stackpointer);
+}
+
+fn and(mut stack: Vec<i32>, mut stackpointer: usize) -> (Vec<i32>, usize) {
+    let rt_a = pop(stack, stackpointer);
+    let a = rt_a.1;
+    stackpointer = rt_a.2;
+
+    let rt_b = pop(rt_a.0, stackpointer);
+    let b: i32 = rt_b.1;
+    stackpointer = rt_b.2;
+
+    let rt = push((a & b) as i32, rt_b.0, stackpointer);
+    stack = rt.0;
+    stackpointer = rt.1;
+
+    return (stack, stackpointer);
+}
+
+fn or(mut stack: Vec<i32>, mut stackpointer: usize) -> (Vec<i32>, usize) {
+    let rt_a = pop(stack, stackpointer);
+    let a = rt_a.1;
+    stackpointer = rt_a.2;
+
+    let rt_b = pop(rt_a.0, stackpointer);
+    let b: i32 = rt_b.1;
+    stackpointer = rt_b.2;
+
+    let rt = push((a | b) as i32, rt_b.0, stackpointer);
+    stack = rt.0;
+    stackpointer = rt.1;
+
+    return (stack, stackpointer);
+}
+
+fn not(mut stack: Vec<i32>, mut stackpointer: usize) -> (Vec<i32>, usize) {
+    let rt_a = pop(stack, stackpointer);
+    let a = rt_a.1;
+    stackpointer = rt_a.2;
+
+    let rt = push(!a as i32, rt_a.0, stackpointer);
+    stack = rt.0;
+    stackpointer = rt.1;
+
+    return (stack, stackpointer);
+}
+
+// Adjusting the stack operations
 fn pop(mut stack: Vec<i32>, mut stackpointer: usize) -> (Vec<i32>, i32, usize) {
     if stackpointer > 0 {
         stackpointer -= 1;
