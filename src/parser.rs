@@ -6,25 +6,23 @@ enum Keywords {
     Storm,
     Air,
     Gyre,
-    Twister,
-    Whirl(Boolean),
+    Whirl(bool),
     Swirl,
     Typhoon,
     Funnel,
 }
 
 fn parse() {
-    todo!(parse input to good format);
+    //TODO: parse input to good format
 
     match p {
-        Keywords::Air => 4 + 5,
+        Keywords::Air => todo!(),
         Keywords::Updraft(value1, value2) => todo!(),
         Keywords::Suction(value1, value2) => todo!(),
         Keywords::Twister(value1, value2) => todo!(),
         Keywords::Churn(value1, value2) => todo!(),
         Keywords::Storm => todo!(),
         Keywords::Gyre => todo!(),
-        Keywords::Twister => todo!(),
         Keywords::Whirl(statement) => todo!(),
         Keywords::Swirl => todo!(),
         Keywords::Typhoon => todo!(),
