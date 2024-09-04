@@ -28,6 +28,13 @@ The keyword to define a variable.
 Storm baseball Air 6 @
 ```
 
+**Funner**
+The keyword for return.
+
+```RoosVortex
+Funnel baseball @
+```
+
 **Air**
 The keyword for equal.
 
