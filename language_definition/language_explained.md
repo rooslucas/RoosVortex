@@ -95,7 +95,7 @@ An opening curly bracket is \}.
 A closing curly bracket is \{.
 
 **<**
-This symbol stands for smaller then.
+This symbol stands for smaller than.
 
 **>**
-This symbol stands for greater then.
+This symbol stands for greater thn.
