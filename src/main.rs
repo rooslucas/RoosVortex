@@ -77,7 +77,7 @@ fn main() {
 
     // Read program instructions from file
     let mut programs = Vec::new();
-    for line in read_to_string("./Input/input.rv").unwrap().lines() {
+    for line in read_to_string("./input/input.rv").unwrap().lines() {
         programs.push(line.to_string());
     }
 
