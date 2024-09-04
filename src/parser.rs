@@ -17,7 +17,9 @@ fn parse() {
     let mut function_list: Vec<String> = vec![];
 
     match p {
-        Keywords::Air => function_list.push(todo!()),
+        Keywords::Air => {
+            todo!()
+        }
 
         Keywords::Updraft(value1, value2) => {
             todo!(); // find value1 on stack
@@ -43,7 +45,7 @@ fn parse() {
             function_list.push("DIV".to_owned());
         }
 
-        Keywords::Storm => todo!(),
+        Keywords::Storm => function_list.push(todo!()),
 
         Keywords::Gyre => todo!(),
 
