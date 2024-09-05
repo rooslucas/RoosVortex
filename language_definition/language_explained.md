@@ -48,7 +48,7 @@ The keyword for if.
 
 ```RoosVortex
 Whirl (baseball>football) {
-    football Suction baseball@
+    Suction(football, baseball)@
     }
 ```
 
@@ -57,7 +57,7 @@ The keyword for else.
 
 ```RoosVortex
 Swirl {
-    football Updraft baseball@
+    Updraft(football, baseball)@
 }
 ```
 
@@ -65,28 +65,28 @@ Swirl {
 Used to add two numbers together.
 
 ```RoosVortex
-football Updraft baseball@
+Updraft(football, baseball)@
 ```
 
 **Suction**
 Used to substract two numbers.
 
 ```RoosVortex
-football Suction baseball@
+Suction(football, baseball)@
 ```
 
 **Twister**
 Used to multiply two numbers.
 
 ```RoosVortex
-football Twister baseball@
+Twister(football, baseball)@
 ```
 
 **Churn**
 Used to divide two numbers.
 
 ```RoosVortex
-football Churn baseball@
+Churn(football, baseball)@
 ```
 
 # Symbols
