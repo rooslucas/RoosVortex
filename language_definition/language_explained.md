@@ -7,18 +7,18 @@ In this document I explain the syntax.
 The keyword to define a function.
 
 ```RoosVortex
-Typhoon my_function }
+Typhoon my_function {
 Type your code here @
-{
+}
 ```
 
 **Gyre**
 The keyword for a loop function.
 
 ```RoosVortex
-Gyre )x < y( }
+Gyre (x < y) {
 Type your code here @
-{
+}
 ```
 
 **Storm**
@@ -47,18 +47,18 @@ Storm football Air 9 @
 The keyword for if.
 
 ```RoosVortex
-Whirl )baseball>football( }
+Whirl (baseball>football) {
     football Suction baseball @
-    {
+    }
 ```
 
 **Swirl**
 The keyword for else.
 
 ```RoosVortex
-Swirl }
+Swirl {
     football Updraft baseball @
-    {
+}
 ```
 
 **Updraft**
@@ -95,11 +95,11 @@ football Churn baseball @
 This symbol is equivalent to ; in other languages. It marks the end of a line of code.
 
 **Brackets**
-An opening bracket is \).
-A closing bracket is \(.
+An opening bracket is \(.
+A closing bracket is \).
 
-An opening curly bracket is \}.
-A closing curly bracket is \{.
+An opening curly bracket is \{.
+A closing curly bracket is \}.
 
 **<**
 This symbol stands for smaller than.
