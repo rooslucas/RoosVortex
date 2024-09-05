@@ -1,3 +1,5 @@
+use std::collections::HashMap;
+
 enum Keywords {
     Updraft(i32, i32),
     Suction(i32, i32),
@@ -15,6 +17,7 @@ enum Keywords {
 fn parse() {
     //TODO: parse input to good format
     let mut function_list: Vec<String> = vec![];
+    let mut heap = HashMap::new();
 
     match p {
         Keywords::Air => {
@@ -45,7 +48,7 @@ fn parse() {
             function_list.push("DIV".to_owned());
         }
 
-        Keywords::Storm => function_list.push(todo!()),
+        Keywords::Storm => {heap.push(todo!)}
 
         Keywords::Gyre => todo!(),
 
