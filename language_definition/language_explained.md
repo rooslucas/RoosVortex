@@ -105,4 +105,4 @@ A closing curly bracket is \}.
 This symbol stands for smaller than.
 
 **>**
-This symbol stands for greater thn.
+This symbol stands for greater than.
