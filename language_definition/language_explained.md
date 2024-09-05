@@ -8,7 +8,7 @@ The keyword to define a function.
 
 ```RoosVortex
 Typhoon my_function {
-Type your code here @
+Type your code here@
 }
 ```
 
@@ -17,7 +17,7 @@ The keyword for a loop function.
 
 ```RoosVortex
 Gyre (x < y) {
-Type your code here @
+Type your code here@
 }
 ```
 
@@ -25,22 +25,22 @@ Type your code here @
 The keyword to define a variable.
 
 ```RoosVortex
-Storm baseball Air 6 @
+Storm baseball Air 6@
 ```
 
 **Funner**
 The keyword for return.
 
 ```RoosVortex
-Funnel baseball @
+Funnel baseball@
 ```
 
 **Air**
 The keyword for equal.
 
 ```RoosVortex
-Storm baseball Air 6 @
-Storm football Air 9 @
+Storm baseball Air 6@
+Storm football Air 9@
 ```
 
 **Whirl**
@@ -48,7 +48,7 @@ The keyword for if.
 
 ```RoosVortex
 Whirl (baseball>football) {
-    football Suction baseball @
+    football Suction baseball@
     }
 ```
 
@@ -57,7 +57,7 @@ The keyword for else.
 
 ```RoosVortex
 Swirl {
-    football Updraft baseball @
+    football Updraft baseball@
 }
 ```
 
@@ -65,28 +65,28 @@ Swirl {
 Used to add two numbers together.
 
 ```RoosVortex
-football Updraft baseball @
+football Updraft baseball@
 ```
 
 **Suction**
 Used to substract two numbers.
 
 ```RoosVortex
-football Suction baseball @
+football Suction baseball@
 ```
 
 **Twister**
 Used to multiply two numbers.
 
 ```RoosVortex
-football Twister baseball @
+football Twister baseball@
 ```
 
 **Churn**
 Used to divide two numbers.
 
 ```RoosVortex
-football Churn baseball @
+football Churn baseball@
 ```
 
 # Symbols
